@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinical BioAge Estimator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+      color: #222;
+    }
+    h1, h2, h3 {
+      text-align: center;
+    }
+    .section {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      max-width: 700px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .factor-box {
+      padding: 12px;
+      border-radius: 8px;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+    .normal { background: #d4edda; }      /* light green */
+    .unknown { background: #e2e3e5; }     /* light gray */
+    .abnormal { background: #f8d7da; }    /* light red */
+    input[type="number"] {
+      width: 100px;
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .result {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 40px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Clinical BioAge Estimator</h1>
+  <p style="text-align:center;">Science-backed habits to help you reverse aging</p>
+  <p style="text-align:center; font-weight:bold; font-size:16px;">
+    Developed by Amir J in collaboration with a licensed Geriatric Practitioner
+  </p>
+
+  <div class="section">
+    <h2>Chronological Age Factors:</h2>
+    <label for="chronAge"><b>Insert Chronological Age:</b></label>
+    <input type="number" id="chronAge" min="1" max="99" oninput="updateAge()" />
+
+    <h3>Blood Pressure</h3>
+    <div class="factor-box normal" onclick="setFactor('bp', -1)">Within Normal Limits: ≤120/80</div>
+    <div class="factor-box abnormal" onclick="setFactor('bp', 5)">Hypertension: >120/80</div>
+    <div class="factor-box unknown" onclick="setFactor('bp', 0)">Don't Know</div>
+
+    <h3>Blood Cholesterol</h3>
+    <div class="factor-box normal" onclick="setFactor('chol', -1)">Normal Cholesterol</div>
+    <div class="factor-box abnormal" onclick="setFactor('chol', 5)">High Blood Cholesterol (Hyperlipidemia)</div>
+    <div class="factor-box unknown" onclick="setFactor('chol', 0)">Don't Know</div>
+
+    <h3>Body Mass Index (BMI)</h3>
+    <p><a href="https://www.nhlbi.nih.gov/health/educational/lose_wt/BMI/bmicalc.htm" target="_blank">Calculate your BMI here</a></p>
+    <div class="factor-box normal" onclick="setFactor('bmi', -1)">Normal BMI (18.5–24.9)</div>
+    <div class="factor-box abnormal" onclick="setFactor('bmi', 5)">Overweight/Obese BMI ≥25</div>
+    <div class="factor-box unknown" onclick="setFactor('bmi', 0)">Don't Know</div>
+
+    <div class="result">
+      Your Estimated Biological Age: <span id="bioAge">--</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🌱 Lifestyle Changes to Reduce Biological Age</h2>
+    <ul>
+      <li><b>Diet:</b> Eat whole foods, reduce salt intake, sugary drinks, and fried food</li>
+      <li><b>Exercise:</b> 45 minutes of cardio daily</li>
+      <li><b>Sleep:</b> Aim for 7–8 hours nightly</li>
+      <li><b>Hydration:</b> Drink enough water daily</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    Clinical BioAge Estimator © 2025
+  </div>
+
+<script>
+  let factors = { bp: 0, chol: 0, bmi: 0 };
+
+  function setFactor(type, value) {
+    factors[type] = value;
+    updateAge();
+  }
+
+  function updateAge() {
+    const baseAge = parseInt(document.getElementById("chronAge").value);
+    const resultBox = document.getElementById("bioAge");
+
+    if (isNaN(baseAge)) {
+      resultBox.textContent = "--";
+      return;
+    }
+
+    let estAge = baseAge + factors.bp + factors.chol + factors.bmi;
+    if (estAge < 0) estAge = 0;
+    resultBox.textContent = estAge;
+  }
+</script>
+
+</body>
+</html>
